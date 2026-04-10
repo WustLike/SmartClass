@@ -1,0 +1,2 @@
+# SmartClass
+Smart AI Class
