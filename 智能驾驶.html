@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>5车道自动避障</title>
+<style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{
+        width:100%;
+        height:100%;
+        background:#111;
+        color:#fff;
+        font-family:Arial,sans-serif;
+        overflow:hidden;
+    }
+    .box{
+        width:100%;max-width:480px;height:100%;
+        margin:0 auto;display:flex;flex-direction:column;padding:8px;
+    }
+    
+    .time-box {
+        font-size:20px;font-weight:bold;margin-bottom:8px;text-align:center;
+    }
+
+    .road{
+        flex:1;background:#222;border:2px solid #fff;border-radius:8px;
+        position:relative;overflow:hidden;min-height:300px;
+    }
+    .lane{
+        position:absolute;width:20%;height:100%;border-right:1px dashed #444;
+    }
+
+    .virtual-straight {
+        position: absolute;
+        width: 40px;
+        height: 300px;
+        bottom: 100px;
+        background: linear-gradient(to top, rgba(0,255,0,0.25), transparent);
+        border-radius: 4px;
+        pointer-events: none;
+        margin-left: -20px;
+        z-index: 1;
+        display: none;
+    }
+
+    /* 虚拟车道箭头 */
+    .virtual-straight::after {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 16px solid rgba(0, 255, 0, 0.6);
+    }
+    .virtual-straight::before {
+        content: "";
+        position: absolute;
+        top: 35px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 12px solid rgba(0, 255, 0, 0.5);
+    }
+
+    /* 更形象的小车样式 */
+    .car {
+        width: 42px;
+        height: 70px;
+        background: #1a73e8;
+        position: absolute;
+        bottom: 40px;
+        transition: left 0.14s ease;
+        border-radius: 10px 10px 4px 4px;
+        margin-left: -21px;
+        box-shadow: 0 0 14px #1a73e8, 0 0 6px #0ff;
+        z-index: 2;
+        /* 前进动画：轻微上下浮动 */
+        animation: carMove 0.4s infinite alternate ease-in-out;
+    }
+
+    /* 前进浮动动画 */
+    @keyframes carMove {
+        from { transform: translateY(0); }
+        to   { transform: translateY(-1px); }
+    }
+
+    /* 车头 */
+    .car::before {
+        content: "";
+        position: absolute;
+        top: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 32px;
+        height: 20px;
+        background: #0d47a1;
+        border-radius: 6px;
+    }
+
+    /* 挡风玻璃 + 车灯 */
+    .car::after {
+        content: "";
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 22px;
+        height: 10px;
+        background: #fff;
+        border-radius: 2px;
+        box-shadow: 
+            -18px 12px 0 2px #ffeb3b, /* 左车灯 */
+             18px 12px 0 2px #ffeb3b; /* 右车灯 */
+        animation: lightFlash 1.2s infinite alternate;
+    }
+
+    /* 车灯呼吸效果 */
+    @keyframes lightFlash {
+        from { opacity: 0.8; }
+        to   { opacity: 1; box-shadow: -18px 12px 0 3px #ff0, 18px 12px 0 3px #ff0; }
+    }
+
+    /* 车轮 */
+    .car-wheel {
+        position: absolute;
+        width: 8px;
+        height: 10px;
+        background: #222;
+        border-radius: 2px;
+        bottom: -4px;
+    }
+    .wheel1{ left:6px; }
+    .wheel2{ right:6px; }
+    .wheel3{ left:6px; top:4px; }
+    .wheel4{ right:6px; top:4px; }
+
+    .obs{
+        width:40px;height:40px;background:#f30;
+        position:absolute;border-radius:4px;
+        margin-left:-20px;box-shadow:0 0 10px #f30;z-index:1;
+    }
+    .finish{
+        position:absolute;top:50%;left:50%;
+        transform:translate(-50%,-50%);
+        font-size:32px;color:#0f0;font-weight:bold;
+        display:none;text-align:center;z-index:10;
+    }
+    .panel{
+        display:flex;gap:8px;justify-content:center;margin:10px 0;
+    }
+    .laneBtn{
+        width:50px;height:50px;font-size:18px;
+        background:#444;color:#fff;border:none;border-radius:8px;
+    }
+    .laneBtn.active{ background:#09c; }
+
+    #startBtn{
+        position:absolute;top:35%;left:50%;transform:translate(-50%,-50%);
+        width:240px;height:80px;font-size:30px;background:#09c;color:#fff;
+        font-weight:bold;border:none;border-radius:12px;z-index:99;
+    }
+
+    .rule-box{
+        position:absolute;top:62%;left:50%;transform:translate(-50%,-50%);
+        background:rgba(0,0,0,0.6);padding:16px 22px;border-radius:10px;
+        border:1px solid #666;font-size:15px;line-height:1.7;color:#eee;
+        z-index:98;width:90%;max-width:360px;text-align:left;
+    }
+    .rule-box h4{
+        text-align:center;margin-bottom:10px;color:#fff;font-size:18px;
+    }
+</style>
+</head>
+<body>
+
+<div class="box">
+    <div class="time-box">剩余时间：<span id="time">60</span> 秒</div>
+    <div class="finish" id="finish">闯关成功！</div>
+
+    <div class="panel">
+        <button class="laneBtn" data-lane="0">1</button>
+        <button class="laneBtn" data-lane="1">2</button>
+        <button class="laneBtn active" data-lane="2">3</button>
+        <button class="laneBtn" data-lane="3">4</button>
+        <button class="laneBtn" data-lane="4">5</button>
+    </div>
+
+    <div class="road">
+        <div class="lane" style="left:0"></div>
+        <div class="lane" style="left:20%"></div>
+        <div class="lane" style="left:40%"></div>
+        <div class="lane" style="left:60%"></div>
+        <div class="lane" style="left:80%"></div>
+        <div id="virtualStraight" class="virtual-straight"></div>
+        <canvas id="curveCanvas" style="position:absolute; bottom:100px; left:0; width:100%; height:300px; pointer-events:none; z-index:1; display: none;"></canvas>
+        
+        <div class="car" id="car">
+            <div class="car-wheel wheel1"></div>
+            <div class="car-wheel wheel2"></div>
+            <div class="car-wheel wheel3"></div>
+            <div class="car-wheel wheel4"></div>
+        </div>
+    </div>
+</div>
+
+<button id="startBtn">开始游戏</button>
+<div class="rule-box">
+    <h4>游戏规则</h4>
+    1. 点击数字1-5设置小车目标车道<br>
+    2. 小车会自动躲避红色障碍物<br>
+    3. 坚持60秒不碰撞即可闯关成功<br>
+    4. 游戏全程自动行驶，无需手动控制
+</div>
+
+<script>
+const car = document.getElementById('car');
+const road = document.querySelector('.road');
+const timeText = document.getElementById('time');
+const finishText = document.getElementById('finish');
+const laneBtns = document.querySelectorAll('.laneBtn');
+const virtualStraight = document.getElementById('virtualStraight');
+const curveCanvas = document.getElementById('curveCanvas');
+const ctx = curveCanvas.getContext('2d');
+const startBtn = document.getElementById('startBtn');
+const ruleBox = document.querySelector('.rule-box');
+
+function resizeRoad(){
+    curveCanvas.width = road.clientWidth;
+    curveCanvas.height = 300;
+    laneCenter.length = 0;
+    let w = road.clientWidth;
+    laneCenter.push(w*0.1, w*0.3, w*0.5, w*0.7, w*0.9);
+    car.style.left = laneCenter[currentLane] + 'px';
+}
+
+const laneCenter = [];
+let currentLane = 2;
+let targetLane = 2;
+let obsList = [];
+let running = false;
+let time = 60;
+
+let avoidStayTime = 0;
+const stayFrames = 20;
+
+resizeRoad();
+window.addEventListener('resize', resizeRoad);
+
+laneBtns.forEach(btn => {
+    btn.onclick = () => {
+        laneBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        targetLane = parseInt(btn.dataset.lane);
+    };
+});
+
+function startGame(){
+    if(running) return;
+
+    startBtn.style.display = 'none';
+    ruleBox.style.display = 'none';
+    running = true;
+
+    virtualStraight.style.display = 'block';
+    curveCanvas.style.display = 'block';
+
+    setInterval(() => {
+        if(!running) return;
+        obsList.forEach((obj, i) => {
+            let y = parseFloat(obj.el.style.top) + 3.8;
+            obj.el.style.top = y + 'px';
+            if(y > road.clientHeight){
+                obj.el.remove();
+                obsList.splice(i, 1);
+            }
+        });
+    }, 20);
+
+    gameLoop();
+    setInterval(spawnObs, 1400);
+
+    let timer = setInterval(() => {
+        if(!running) return;
+        time--;
+        timeText.textContent = time;
+        if(time <= 0){
+            clearInterval(timer);
+            running = false;
+            finishText.style.display = 'block';
+            startBtn.style.display = 'block';
+            startBtn.textContent = '重新开始';
+            ruleBox.style.display = 'block';
+        }
+    }, 1000);
+}
+
+function spawnObs(){
+    if(!running) return;
+    let lane = Math.floor(Math.random() * 5);
+    let div = document.createElement('div');
+    div.className = 'obs';
+    div.style.left = laneCenter[lane] + 'px';
+    div.style.top = '0px';
+    road.appendChild(div);
+    obsList.push({ el: div, lane: lane });
+}
+
+function drawCurve(){
+    ctx.clearRect(0, 0, curveCanvas.width, curveCanvas.height);
+    if(currentLane === targetLane) return;
+
+    ctx.strokeStyle = 'rgba(0,255,0,0.3)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6,6]);
+
+    const x1 = laneCenter[currentLane];
+    const x2 = laneCenter[targetLane];
+    const h = curveCanvas.height;
+
+    ctx.beginPath();
+    ctx.moveTo(x1, h);
+    ctx.bezierCurveTo(x1, h*0.6, x2, h*0.4, x2, 0);
+    ctx.stroke();
+}
+
+function gameLoop(){
+    if(!running) return;
+
+    let inDanger = obsList.some(o => {
+        const y = parseFloat(o.el.style.top);
+        return o.lane === currentLane && y > 380 && y < 660;
+    });
+
+    if(inDanger){
+        currentLane = currentLane < 4 ? currentLane + 1 : currentLane - 1;
+        avoidStayTime = stayFrames;
+    }else{
+        if(avoidStayTime > 0){
+            avoidStayTime--;
+        }else{
+            if(currentLane < targetLane) currentLane++;
+            if(currentLane > targetLane) currentLane--;
+        }
+    }
+
+    car.style.left = laneCenter[currentLane] + 'px';
+    virtualStraight.style.left = laneCenter[targetLane] + 'px';
+    drawCurve();
+
+    requestAnimationFrame(gameLoop);
+}
+
+startBtn.addEventListener('click', function(){
+    if(time <= 0){
+        time = 60;
+        timeText.textContent = '60';
+        finishText.style.display = 'none';
+        obsList.forEach(o => o.el.remove());
+        obsList = [];
+        currentLane = 2;
+        targetLane = 2;
+        laneBtns.forEach((b,i)=>{
+            b.classList.toggle('active', i===2);
+        });
+    }
+    startGame();
+});
+</script>
+</body>
+</html>
