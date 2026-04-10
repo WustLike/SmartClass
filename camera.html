@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>摄像头调用示例</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .camera-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        video {
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+        .btn-secondary {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #d32f2f;
+        }
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .message.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+        }
+        .message.success {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+            border-left: 4px solid #4CAF50;
+        }
+        .message.info {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            border-left: 4px solid #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>摄像头调用示例</h1>
+        
+        <div class="message info" id="security-info" style="display: none;">
+            <strong>安全提示：</strong>摄像头访问需要在 HTTPS 或 localhost 环境下进行。
+        </div>
+        
+        <div class="message error" id="browser-error" style="display: none;">
+            <strong>浏览器不支持：</strong>请使用 Chrome、Edge 或 Firefox 浏览器并开启 HTTPS。
+        </div>
+        
+        <div class="camera-container">
+            <video id="camera-video" autoplay playsinline></video>
+            <div class="button-container">
+                <button class="btn-primary" onclick="startCamera()">开始摄像头</button>
+                <button class="btn-secondary" onclick="stopCamera()">停止摄像头</button>
+            </div>
+        </div>
+        
+        <div class="message" id="error-message" style="display: none;"></div>
+    </div>
+    
+    <script>
+        let mediaStream = null;
+        let videoElement = document.getElementById('camera-video');
+        let errorMessage = document.getElementById('error-message');
+        let securityInfo = document.getElementById('security-info');
+        let browserError = document.getElementById('browser-error');
+        
+        // 检查安全上下文
+        function checkSecurityContext() {
+            if (!window.isSecureContext && window.location.hostname !== 'localhost' && !window.location.hostname.startsWith('127.')) {
+                securityInfo.style.display = 'block';
+                return false;
+            }
+            return true;
+        }
+        
+        // 检查浏览器兼容性
+        function checkBrowserCompatibility() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                browserError.style.display = 'block';
+                return false;
+            }
+            return true;
+        }
+        
+        // 开始摄像头
+        function startCamera() {
+            // 检查安全上下文
+            if (!checkSecurityContext()) {
+                showError('摄像头访问需要在 HTTPS 或 localhost 环境下进行');
+                return;
+            }
+            
+            // 检查浏览器兼容性
+            if (!checkBrowserCompatibility()) {
+                showError('请使用 Chrome、Edge 或 Firefox 浏览器并开启 HTTPS');
+                return;
+            }
+            
+            // 清除之前的错误信息
+            hideError();
+            
+            // 配置摄像头参数
+            const constraints = {
+                video: {
+                    facingMode: 'user' // 优先使用前置摄像头
+                },
+                audio: false
+            };
+            
+            // 请求摄像头权限
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(stream => {
+                    mediaStream = stream;
+                    videoElement.srcObject = stream;
+                    showSuccess('摄像头已成功启动');
+                })
+                .catch(error => {
+                    handleCameraError(error);
+                });
+        }
+        
+        // 停止摄像头
+        function stopCamera() {
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(track => {
+                    track.stop();
+                });
+                mediaStream = null;
+                videoElement.srcObject = null;
+                showSuccess('摄像头已停止');
+            } else {
+                showError('摄像头未启动');
+            }
+        }
+        
+        // 处理摄像头错误
+        function handleCameraError(error) {
+            console.error('摄像头错误:', error);
+            
+            switch (error.name) {
+                case 'NotAllowedError':
+                    showError('摄像头权限被拒绝，请在浏览器设置中允许访问摄像头');
+                    break;
+                case 'NotFoundError':
+                    showError('未找到摄像头设备，请确保摄像头已连接');
+                    break;
+                case 'NotReadableError':
+                    showError('摄像头被其他应用占用，请关闭其他使用摄像头的应用');
+                    break;
+                case 'OverconstrainedError':
+                    showError('摄像头设备无法满足要求，请尝试使用其他摄像头');
+                    break;
+                default:
+                    showError('无法访问摄像头，请检查权限设置和设备连接。错误: ' + error.message);
+            }
+        }
+        
+        // 显示错误信息
+        function showError(message) {
+            errorMessage.className = 'message error';
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+        
+        // 显示成功信息
+        function showSuccess(message) {
+            errorMessage.className = 'message success';
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            
+            // 3秒后自动隐藏成功信息
+            setTimeout(() => {
+                hideError();
+            }, 3000);
+        }
+        
+        // 隐藏错误信息
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+        
+        // 页面加载时检查环境
+        window.addEventListener('DOMContentLoaded', function() {
+            checkSecurityContext();
+            checkBrowserCompatibility();
+        });
+    </script>
+</body>
+</html>

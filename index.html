@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>闭环控制系统课堂 - 教学辅助平台</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 智能体浮窗 -->
+        <div id="ai-assistant" class="ai-assistant">
+            <div class="ai-assistant-header">
+                <div class="ai-assistant-title">智能助手</div>
+                <button class="ai-assistant-close" onclick="toggleAiAssistant()">×</button>
+            </div>
+            <div class="ai-assistant-body">
+                <div class="ai-assistant-messages" id="ai-assistant-messages">
+                    <div class="ai-message">
+                        <div class="message-content">你好！我是智能助手，有什么可以帮助你的吗？</div>
+                    </div>
+                </div>
+                <div class="ai-assistant-input">
+                    <input type="text" id="ai-assistant-input" placeholder="输入你的问题...">
+                    <button onclick="sendAiMessage()">发送</button>
+                </div>
+            </div>
+        </div>
+        <button class="ai-assistant-toggle" onclick="toggleAiAssistant()">
+            <div class="ai-icon">🤖</div>
+        </button>
+
+        <!-- 登录页面 -->
+        <div id="login-page" class="page active">
+            <div class="login-container">
+                <div class="login-header">
+                    <h1>闭环控制系统课堂</h1>
+                    <p>教学辅助平台</p>
+                </div>
+                <form id="login-form" class="login-form">
+                    <div class="role-selector">
+                        <div class="role-option active" data-role="student">
+                            <div class="role-icon">🎓</div>
+                            <span>学生</span>
+                        </div>
+                        <div class="role-option" data-role="teacher">
+                            <div class="role-icon">👨‍🏫</div>
+                            <span>教师</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">用户名</label>
+                        <input type="text" id="username" placeholder="请输入用户名" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" id="password" placeholder="请输入密码" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remember-me">
+                            <span>记住我</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="login-btn">登录</button>
+                    <div class="demo-tips">
+                        <p>演示账号：</p>
+                        <p>学生(小组): 小组1 / 1111</p>
+                        <p>学生(小组): 小组2 / 1111</p>
+                        <p>学生(小组): 小组3 / 1111</p>
+                        <p>学生(小组): 小组4 / 1111</p>
+                        <p>教师: teacher / 123456</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 学生页面 -->
+        <div id="student-page" class="page">
+            <nav class="navbar">
+                <div class="nav-brand">闭环控制系统课堂</div>
+                <div class="nav-user">
+                <span id="student-name">学生用户</span>
+                <button id="logout-btn" class="logout-btn">退出</button>
+            </div>
+            </nav>
+            <div class="main-content">
+                <aside class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li class="menu-item active" data-menu="game">
+                            <span class="menu-icon">🎮</span>
+                            <span>游戏体验</span>
+                        </li>
+                        <li class="menu-item" data-menu="warning">
+                            <span class="menu-icon">⚠️</span>
+                            <span>情景警示</span>
+                        </li>
+                        <li class="menu-item" data-menu="comparison">
+                            <span class="menu-icon">🔄</span>
+                            <span>对比体验</span>
+                        </li>
+                        <li class="menu-item" data-menu="practice">
+                            <span class="menu-icon">🔧</span>
+                            <span>动手实操</span>
+                        </li>
+                        <li class="menu-item" data-menu="principle">
+                            <span class="menu-icon">💡</span>
+                            <span>原理升华</span>
+                        </li>
+                        <li class="menu-item" data-menu="homework">
+                            <span class="menu-icon">✏️</span>
+                            <span>课后作业</span>
+                        </li>
+                    </ul>
+                </aside>
+                <div class="content-area">
+                    <!-- 游戏体验 -->
+                    <div id="student-game" class="content-section active">
+                        <h2>游戏体验</h2>
+                        <div class="game-content">
+                            <div class="game-description">
+                                <h3>【核心标题】 游戏初体验：人工驾驶的挑战</h3>
+                                <p>通过游戏体验，感受人工控制及认识到感知的重要性。</p>
+                            </div>
+                            
+                            <!-- 游戏跳转链接和规则 -->
+                            <div class="game-container">
+                                <!-- 游戏跳转链接 -->
+                                <div class="game-links">
+                                    <a href="手动控制.html" target="_blank" class="game-link manual-car">
+                                        <div class="game-link-icon">🚗</div>
+                                        <div class="game-link-content">
+                                            <h4>手动控制小车</h4>
+                                            <p>体验手动驾驶的挑战，认识感知的重要性</p>
+                                            <span class="game-link-btn">开始体验 →</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                
+                                <!-- 游戏规则说明 -->
+                                <div class="game-rules">
+                                    <h3>🎮 手动控制小车游戏规则</h3>
+                                    <ul>
+                                        <li>1. 开局选择一条车道作为你的固定车道</li>
+                                        <li>2. 固定车道无障碍物时变道，扣5分</li>
+                                        <li>3. 固定车道有障碍物，躲避后3秒内返回，+10分</li>
+                                        <li>4. 其他车道障碍物不加分</li>
+                                        <li>5. 碰到障碍物游戏立即结束</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- 游戏得分模块 -->
+                            <div class="game-score">
+                                <h3>🏆 游戏得分</h3>
+                                <div class="score-container">
+                                    <div class="score-item">
+                                        <label>手动控制小车得分：</label>
+                                        <span id="manual-car-score">0</span>
+                                        <button id="sync-manual-score" class="btn btn-primary">同步到教师端</button>
+                                    </div>
+                                    <div class="score-input">
+                                        <label>输入游戏得分：</label>
+                                        <input type="number" id="score-input" class="form-control" placeholder="请输入得分">
+                                        <button id="update-score" class="btn btn-primary">更新得分</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 游戏分享 -->
+                            <div class="game-share">
+                                <h3>🎮 游戏分享</h3>
+                                <div class="share-container">
+                                    <!-- 分享列表 -->
+                                    <div id="share-items" class="share-items">
+                                        <!-- 分享内容将在这里动态显示 -->
+                                    </div>
+                                    <!-- 分享表单 -->
+                                    <div class="share-form">
+                                        <div class="form-group">
+                                            <textarea id="share-content" class="form-control" rows="3" placeholder="请输入您的游戏体验和心得..."></textarea>
+                                        </div>
+                                        <button id="share-btn" class="btn btn-primary">发送</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 情景警示 -->
+                    <div id="student-warning" class="content-section">
+                        <h2>情景警示</h2>
+                        <div class="warning-content">
+                            <div class="warning-description">
+                                <h3>【核心标题】 现实警示：疲劳驾驶的代价</h3>
+                                <p>通过情景模拟，了解人工控制和开环控制的局限性。</p>
+                            </div>
+                            
+                            <!-- 视频列表 -->
+                            <div class="video-list">
+                                <h4>课堂视频</h4>
+                                <div class="video-grid">
+                                    <div class="video-item">
+                                        <a href="疲劳驾驶.mp4" target="_blank" class="video-link">
+                                            <div class="video-icon">📹</div>
+                                            <h5>疲劳驾驶案例分析</h5>
+                                            <p>课堂讲解疲劳驾驶的危害</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.stats.gov.cn/zt_18555/ztsj/hstjnj/sh2007/202303/t20230303_1926121.html" target="_blank" class="video-link">
+                                            <div class="video-icon">📊</div>
+                                            <h5>事故数据统计</h5>
+                                            <p>真实数据展示</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.bilibili.com/video/BV14a4y1S7LV/" target="_blank" class="video-link">
+                                            <div class="video-icon">⚡</div>
+                                            <h5>应急处理技巧</h5>
+                                            <p>如何应对疲劳驾驶</p>
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                <h4>在线视频</h4>
+                                <div class="video-grid">
+                                    <div class="video-item">
+                                        <a href="https://www.bilibili.com/video/BV18u9NBcEhL" target="_blank" class="video-link">
+                                            <div class="video-icon">🚗</div>
+                                            <h5>车祸现场警示</h5>
+                                            <p>Bilibili视频</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.bilibili.com/video/BV1Zf421d7y6/" target="_blank" class="video-link">
+                                            <div class="video-icon">⚠️</div>
+                                            <h5>疲劳驾驶危害</h5>
+                                            <p>真实案例分析</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.bilibili.com/video/BV1xQ4y1W7PV/" target="_blank" class="video-link">
+                                            <div class="video-icon">🛑</div>
+                                            <h5>安全驾驶指南</h5>
+                                            <p>预防疲劳驾驶</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item more">
+                                        <a href="https://www.bilibili.com/video/BV1nM4m1R79M/?spm_id_from=333.337.search-card.all.click" target="_blank" class="video-link">
+                                            <div class="video-icon">➕</div>
+                                            <h5>更多视频</h5>
+                                            <p>点击查看更多</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 对比体验 -->
+                    <div id="student-comparison" class="content-section">
+                        <h2>对比体验</h2>
+                        <div class="comparison-content">
+                            <div class="comparison-description">
+                                <h3>【核心标题】 黑科技演示：自动驾驶的魅力</h3>
+                                <p>通过对比开环系统，理解闭环控制系统的优势及检测装置的作用。</p>
+                            </div>
+                            <!-- 游戏跳转链接和规则 -->
+                            <div class="game-container">
+                                <!-- AI游戏小车链接 -->
+                                <div class="game-links">
+                                    <a href="智能驾驶.html" target="_blank" class="game-link ai-car">
+                                        <div class="game-link-icon">🤖</div>
+                                        <div class="game-link-content">
+                                            <h4>AI游戏小车</h4>
+                                            <p>体验AI控制的智能驾驶，对比人工驾驶的差异</p>
+                                            <span class="game-link-btn">开始体验 →</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                
+                                <!-- 游戏规则说明 -->
+                                <div class="game-rules">
+                                    <h3>🤖 AI游戏小车游戏规则</h3>
+                                    <ul>
+                                        <li>1. 点击数字1-5设置小车目标车道</li>
+                                        <li>2. 小车会自动躲避红色障碍物</li>
+                                        <li>3. 坚持60秒不碰撞即可闯关成功</li>
+                                        <li>4. 游戏全程自动行驶，无需手动控制</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- 自动小车优势及条件分享 -->
+                            <div class="comparison-share" style="background-color: #f8f9fa; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                                <h3 style="margin-top: 0; margin-bottom: 20px; color: #333; font-size: 18px;">🤖 对比闭眼操控小车，自动小车的优势及实现条件</h3>
+                                <div class="share-container" style="background-color: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #ddd;">
+                                    <!-- 分享列表 -->
+                                    <div id="student-comparison-share-items" class="share-items" style="max-height: 400px; overflow-y: auto; margin-bottom: 20px;">
+                                        <!-- 分享内容将在这里动态显示 -->
+                                    </div>
+                                    <!-- 分享表单 -->
+                                    <div class="share-form" style="background-color: #f8f9fa; border-radius: 8px; padding: 15px;">
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <textarea id="student-comparison-share-content" class="form-control" rows="3" placeholder="请分享您对自动小车优势及实现条件的理解..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical; font-family: inherit;"></textarea>
+                                        </div>
+                                        <button id="student-comparison-share-btn" class="btn btn-primary" style="width: 100%; padding: 10px; border: none; border-radius: 4px; background-color: #4CAF50; color: white; font-size: 14px; cursor: pointer;">发送</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 动手实操 -->
+                    <div id="student-practice" class="content-section">
+					
+                        <h2>动手实操</h2>
+                        <div class="practice-content">
+                            <div class="practice-description">
+                                <h3>【核心标题】 动手搭建：循迹小车大揭秘</h3>
+                                <p>通过实际操作，理解闭环控制系统的工作过程并学会系统建模。</p>
+                            </div>
+                            
+                            <!-- 循迹小车实操过程说明 -->
+                            <div class="practice-section">
+                                <div style="display: flex; gap: 30px; align-items: center; margin-bottom: 30px;">
+                                    <div style="flex: 1;">
+                                        <h3>🔧 循迹小车实操过程说明</h3>
+                                        <ol>
+                                            <li>给小车设置路线</li>
+                                            <li>启动小车，观察小车的运动轨迹</li>
+                                            <li>尝试找到小车"寻迹"的眼睛</li>
+                                        </ol>
+                                    </div>
+                                    <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
+                                        <div style="width: 100%; height: 300px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+                                            <img src="循迹小车正面.png" alt="循迹小车正面" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 传感器工作原理提示 -->
+                                <div class="sensor-tip" style="padding: 20px; background-color: #f0f8ff; border-left: 4px solid #1890ff; border-radius: 4px;">
+                                    <h4>💡 传感器工作原理提示</h4>
+                                    <p>该传感器有左右两个探头。请结合物理知识推测：当探头照射到黑色轨道时，反射光较（强/ 弱）；照射到白色地板时，反射光较（强 / 弱）。传感器正是利用这种光线反射率的差异，将光信号精准地转换为电信号。</p>
+                                </div>
+                            </div>
+                            
+                            <!-- 认识循迹小车的"眼睛"及工作过程 -->
+                            <div class="practice-section">
+                                <h3>👁️ 认识循迹小车的"眼睛"及工作过程</h3>
+                                <p>循迹小车的"眼睛"通常是指红外传感器或光电传感器，它们能够检测地面的明暗变化，帮助小车识别预设的路线。</p>
+
+                                <!-- 循迹小车控制表格 -->
+                                <div class="table-section" style="margin-top: 30px;">
+                                    <h4>📋 循迹小车控制逻辑表</h4>
+                                    <form id="tracking-car-form" style="margin-top: 20px;">
+                                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                                            <thead>
+                                                <tr style="background-color: #f8f9fa;">
+                                                    <th colspan="2" style="border: 1px solid #ddd; padding: 12px; text-align: center;">循线板</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">小车遇到的情况</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">控制主机应发出的指令<br>(填：左转/右转/直行)</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">电机的动作<br>(左/右轮转速)</th>
+                                                </tr>
+                                                <tr style="background-color: #f8f9fa;">
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">左探头状态</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">右探头状态</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;"></th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;"></th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">检测到黑</td>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">检测到黑</td>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">正在线上</td>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">
+                                                        <input type="text" name="command1" class="form-control" style="width: 100%; text-align: center;" placeholder="输入指令">
+                                                    </td>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">左轮转，右转轮转</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">检测到黑</td>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">检测到白</td>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">车身偏右</td>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">
+                                                        <input type="text" name="command2" class="form-control" style="width: 100%; text-align: center;" placeholder="输入指令">
+                                                    </td>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">左轮慢，右轮快</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">检测到白</td>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">检测到黑</td>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">车身偏左</td>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">
+                                                        <input type="text" name="command3" class="form-control" style="width: 100%; text-align: center;" placeholder="输入指令">
+                                                    </td>
+                                                    <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">左轮快，右轮慢</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 16px;">提交给教师端</button>
+                                    </form>
+                                </div>
+                                
+
+                            </div>
+                            
+                            <!-- 系统建模 -->
+                            <div class="practice-section">
+                                <h3>📊 系统建模</h3>
+                                <p>系统建模是理解闭环控制系统的重要步骤，通过建立框图，可以分析系统的性能。</p>
+                                <p>建模步骤：</p>
+                                <p>第一步：提炼逻辑</p>
+                                <p>在这个循迹小车控制系统中：</p>
+                                <p>输入信号是预设轨迹，<input type="text" class="form-control" id="modeling-detector" style="width: 150px; display: inline-block; margin: 0 5px;" placeholder="请填写" />检测到小车的实际行驶轨迹返回到控制系统的输入端，通过一个具有计算功能的装置（比较器），与设定的轨道位置作比较。当实际位置与设定位置偏离时，<input type="text" class="form-control" id="modeling-controller" style="width: 100px; display: inline-block; margin: 0 5px;" placeholder="请填写" />控制<input type="text" class="form-control" id="modeling-executor" style="width: 80px; display: inline-block; margin: 0 5px;" placeholder="请填写" />转动，改变<input type="text" class="form-control" id="modeling-object" style="width: 80px; display: inline-block; margin: 0 5px;" placeholder="请填写" />的行驶状态。</p>
+                                
+                                <!-- 提交答案按钮 -->
+                                <div style="margin: 20px 0; text-align: center;">
+                                    <button id="submit-modeling-btn" class="btn btn-primary" onclick="submitModelingAnswer()">提交答案</button>
+                                </div>
+                                
+
+                                
+                                <p>第二步：系统建模</p>
+                                <!-- 闭环控制系统方框图 -->
+                                <div class="system-diagram" style="margin-top: 30px; padding: 30px; background-color: #f8f9fa; border-radius: 8px; overflow-x: auto;">
+                                    <h4>📈 闭环控制系统方框图</h4>
+                                    <div style="display: flex; justify-content: center;">
+                                        <img src="闭环方框图.png" alt="闭环控制系统方框图" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                    </div>
+                                </div>
+                                
+
+                                
+                                <!-- 拍照提交按钮 -->
+                                <div style="margin-top: 30px; text-align: center;">
+                                    <button id="take-photo-btn" class="btn btn-primary" onclick="takePhoto()" style="width: 100%; padding: 12px; font-size: 16px; background-color: #ff9800; border-color: #ff9800;">
+                                        📷 拍照提交给教师端
+                                    </button>
+                                </div>
+                                
+
+                                
+                                <!-- 拍照模态框 -->
+                                <div id="camera-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 1000; justify-content: center; align-items: center;">
+                                    <div style="background-color: white; border-radius: 10px; padding: 20px; max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                            <h3>拍照提交</h3>
+                                            <button onclick="closeCameraModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+                                        </div>
+                                        
+                                        <!-- 摄像头预览 -->
+                                        <div id="camera-preview" style="display: block; margin-bottom: 20px;">
+                                            <video id="camera-video" autoplay playsinline style="width: 100%; max-width: 640px; height: auto; border: 2px solid #ddd; border-radius: 8px; margin: 0 auto; display: block;"></video>
+                                            <div style="text-align: center; margin-top: 15px;">
+                                                <button id="take-photo-btn" class="btn btn-primary" onclick="capturePhoto()">拍照</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- 拍照预览 -->
+                                        <div id="photo-preview" style="display: none; margin-bottom: 20px;">
+                                            <h4 style="text-align: center;">拍照预览</h4>
+                                            <div style="display: flex; justify-content: center;">
+                                                <img id="captured-photo" src="" alt="拍照预览" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                            </div>
+                                            <div style="margin-top: 15px; text-align: center;">
+                                                <button id="retake-photo-btn" class="btn btn-secondary" onclick="retakePhoto()" style="margin-right: 10px;">重拍</button>
+                                                <button id="submit-photo-btn" class="btn btn-primary" onclick="submitPhoto()">提交</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 自由讨论模块 -->
+                                <div class="discussion-module" style="margin-top: 40px; border: 2px solid #e0e0e0; border-radius: 12px; background-color: #f5f5f5; overflow: hidden;">
+                                    <div class="discussion-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <span style="font-size: 24px;">💬</span>
+                                            <h4 style="margin: 0; font-size: 16px; font-weight: 600;">如果拔掉传感器的线，会发生什么...（辨析开闭环的区别）</h4>
+                                        </div>
+                                        <span style="font-size: 12px; opacity: 0.9;">自由讨论区</span>
+                                    </div>
+                                    
+                                    <!-- 讨论消息列表 -->
+                                    <div id="student-discussion-messages" class="discussion-messages" style="height: 300px; overflow-y: auto; padding: 15px; background-color: #fafafa;">
+                                        <!-- 消息将动态加载到这里 -->
+                                    </div>
+                                    
+                                    <!-- 输入区域 -->
+                                    <div class="discussion-input-area" style="padding: 15px; background-color: white; border-top: 1px solid #e0e0e0;">
+                                        <div style="display: flex; gap: 10px; align-items: flex-end;">
+                                            <div style="flex: 1;">
+                                                <textarea id="student-discussion-input" class="form-control" placeholder="发表你的看法..." style="resize: none; min-height: 60px; border-radius: 8px; border: 1px solid #ddd; padding: 10px; width: 100%; font-family: inherit;"></textarea>
+                                            </div>
+                                            <button id="student-send-discussion-btn" class="btn btn-primary" onclick="sendDiscussionMessage()" style="padding: 12px 24px; border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; cursor: pointer; font-weight: 500;">
+                                                发送
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 闭环控制系统的工作过程 -->
+                            <div class="practice-section">
+                                <h3>🔄 闭环控制系统的工作过程</h3>
+                                <p>闭环控制系统通过反馈机制实现对系统的精确控制</p>
+                                
+                                <!-- 显示/隐藏方框图按钮 -->
+                                <div style="margin-top: 20px; display: flex; justify-content: center;">
+                                    <button id="toggleDiagramBtn" class="btn btn-primary" onclick="toggleDiagram()">闭环控制系统方框图</button>
+                                </div>
+                                
+                                <!-- 闭环方框图图片（默认隐藏） -->
+                                <div id="diagramContainer" style="margin-top: 30px; display: flex; justify-content: center; display: none;">
+                                    <img src="闭环.png" alt="闭环方框图" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                </div>
+                                
+                                <!-- 反馈的概念 -->
+                                <div style="margin-top: 30px;">
+                                    <h4>📌 反馈的概念</h4>
+                                    <p>反馈是指将系统的输出信号返回到输入端，与输入信号进行比较，从而调整系统的控制行为。在闭环控制系统中，反馈是实现精确控制的关键机制。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 原理升华 -->
+                    <div id="student-principle" class="content-section">
+                        <h2>原理升华</h2>
+                        <div class="principle-content">
+                            <div class="principle-description">
+                                <h3>【核心标题】 技术演进：从循迹到智能驾驶</h3>
+                                <p>深入理解闭环控制系统的核心原理和技术演进。</p>
+                            </div>
+                            
+                            <!-- 视频模块 -->
+                            <div class="video-list">
+                                <h3>🎥 智能驾驶视频</h3>
+                                <div class="video-grid">
+                                    <div class="video-item">
+                                        <a href="智能驾驶.mp4" target="_blank" class="video-link">
+                                            <div class="video-icon">🚗</div>
+                                            <h5>智能驾驶演示</h5>
+                                            <p>智能驾驶技术原理演示视频</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+							
+							<!-- 智能驾驶资料模块 -->
+                            <div class="video-list">
+                                <h3>📚 智能驾驶资料</h3>
+                                <div class="video-grid">
+                                    <div class="video-item">
+                                        <a href="https://www.pcauto.com.cn/gl/88175.html" target="_blank" class="video-link">
+                                            <div class="video-icon">📖</div>
+                                            <h5>智能驾驶技术原理</h5>
+                                            <p>百度百科 - 智能驾驶技术详解</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.tencent.com/zh-cn/articles/123456" target="_blank" class="video-link">
+                                            <div class="video-icon">🔬</div>
+                                            <h5>自动驾驶技术发展</h5>
+                                            <p>腾讯科技 - 自动驾驶技术发展报告</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.alibaba.com/ai/autonomous-driving" target="_blank" class="video-link">
+                                            <div class="video-icon">🤖</div>
+                                            <h5>AI在智能驾驶中的应用</h5>
+                                            <p>阿里巴巴 - AI技术在自动驾驶中的应用</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.baidu.com/s?wd=智能驾驶安全标准" target="_blank" class="video-link">
+                                            <div class="video-icon">🛡️</div>
+                                            <h5>智能驾驶安全标准</h5>
+                                            <p>百度百科 - 智能驾驶安全标准</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 学习分享模块 -->
+                            <div class="learning-share">
+                                <h3>💬 学习分享</h3>
+                                <div class="share-container">
+                                    <!-- 分享列表 -->
+                                    <div id="principle-share-items" class="share-items">
+                                        <!-- 分享内容将在这里动态显示 -->
+                                    </div>
+                                    <!-- 分享表单 -->
+                                    <div class="share-form">
+                                        <div class="form-group">
+                                            <textarea id="principle-share-content" class="form-control" rows="3" placeholder="请分享你的学习心得..."></textarea>
+                                        </div>
+                                        <button id="principle-share-btn" class="btn btn-primary">发送</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 课后作业 -->
+                    <div id="student-homework" class="content-section">
+                        <h2>课后作业</h2>
+                        <div class="homework-content">
+                            <div class="homework-description">
+                                <h3>【核心标题】 回顾与展望</h3>
+                                <p>通过课后作业，巩固对闭环控制系统的理解。</p>
+                            </div>
+                            
+                            <!-- 作业列表 -->
+                            <div class="homework-list">
+                                <h3>📋 作业列表</h3>
+                                <div id="student-homework-items" class="homework-items">
+                                    <!-- 作业内容将在这里动态显示 -->
+                                </div>
+                            </div>
+                            
+
+                            
+                            <!-- 教师答案显示 -->
+                            <div class="teacher-answer">
+                                <h3>📚 教师发布的答案</h3>
+                                <div style="margin-top: 20px; text-align: center;">
+                                    <button id="check-answer-btn" class="btn btn-primary" onclick="displayTeacherAnswer()" style="width: 100%; padding: 12px; font-size: 16px; background-color: #2196F3; border-color: #2196F3;">
+                                        👁️ 查看教师答案
+                                    </button>
+                                </div>
+                                
+                                <div id="teacher-answer" style="margin-top: 20px; padding: 20px; background-color: #e8f5e9; border-radius: 8px; display: none;">
+                                    <h4 style="text-align: center; color: #2e7d32; margin-bottom: 15px;">📝 教师发布的答案</h4>
+                                    <div style="display: flex; justify-content: center; margin-top: 15px;">
+                                        <img id="teacher-answer-image" src="" alt="答案" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 作业详情模态框 -->
+                            <div id="homework-detail-modal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+                                <div class="modal-content" style="background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 800px; border-radius: 8px;">
+                                    <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                        <h3 id="modal-homework-title">作业标题</h3>
+                                        <span class="close" style="color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label for="homework-answer" style="display: block; margin-bottom: 5px; font-weight: 600;">作业答案</label>
+                                            <textarea id="homework-answer" class="form-control" rows="10" placeholder="请输入你的作业答案..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical;"></textarea>
+                                        </div>
+                                        
+                                        <!-- 教师批改信息 -->
+                                        <div id="homework-grade-info" class="homework-grade-info" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 4px; background-color: #f8f9fa;">
+                                            <h4 style="margin-top: 0; margin-bottom: 10px; color: #333;">教师批改</h4>
+                                            <div class="form-group" style="margin-bottom: 10px;">
+                                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">等级</label>
+                                                <div id="homework-grade-display" style="padding: 5px; border: 1px solid #ddd; border-radius: 4px; background-color: #fff; display: inline-block;"></div>
+                                            </div>
+                                            <div class="form-group" style="margin-bottom: 10px;">
+                                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">评分</label>
+                                                <div id="homework-score-display" style="padding: 5px; border: 1px solid #ddd; border-radius: 4px; background-color: #fff; display: inline-block;"></div>
+                                            </div>
+                                            <div class="form-group" style="margin-bottom: 10px;">
+                                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">评语</label>
+                                                <div id="homework-feedback-display" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; background-color: #fff; min-height: 80px;"></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">批改时间</label>
+                                                <div id="homework-graded-at" style="padding: 5px; border: 1px solid #ddd; border-radius: 4px; background-color: #fff; display: inline-block;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                                        <button type="button" class="btn btn-secondary" id="cancel-homework-detail-btn">取消</button>
+                                        <button type="button" class="btn btn-primary" id="submit-homework-btn">提交作业</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+			</div>
+        </div>
+		</div>
+
+        <!-- 教师页面 -->
+        <div id="teacher-page" class="page">
+            <nav class="navbar">
+                <div class="nav-brand">闭环控制系统课堂</div>
+                <div class="nav-user">
+                    <span id="teacher-name">教师用户</span>
+                    <button id="teacher-logout-btn" class="logout-btn">退出</button>
+                </div>
+            </nav>
+            <div class="main-content">
+                <aside class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li class="menu-item active" data-menu="game">
+                            <span class="menu-icon">🎮</span>
+                            <span>游戏体验</span>
+                        </li>
+                        <li class="menu-item" data-menu="warning">
+                            <span class="menu-icon">⚠️</span>
+                            <span>情景警示</span>
+                        </li>
+                        <li class="menu-item" data-menu="comparison">
+                            <span class="menu-icon">🔄</span>
+                            <span>对比体验</span>
+                        </li>
+                        <li class="menu-item" data-menu="practice">
+                            <span class="menu-icon">🔧</span>
+                            <span>动手实操</span>
+                        </li>
+                        <li class="menu-item" data-menu="principle">
+                            <span class="menu-icon">💡</span>
+                            <span>原理升华</span>
+                        </li>
+                        <li class="menu-item" data-menu="homework">
+                            <span class="menu-icon">✏️</span>
+                            <span>作业管理</span>
+                        </li>
+                        <li class="menu-item" data-menu="resources">
+                            <span class="menu-icon">📦</span>
+                            <span>资源库</span>
+                        </li>
+
+                    </ul>
+                </aside>
+                <div class="content-area">
+                    <!-- 教师首页 -->
+                    <div id="teacher-dashboard" class="content-section active">
+                        <h2>游戏体验</h2>
+                        <div class="dashboard-content">
+                            <!-- 游戏体验数据 -->
+                            <div class="game-experience-data" style="margin-top: 30px; background-color: #ffffff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                                <h3 style="margin-top: 0; margin-bottom: 20px; color: #333; font-size: 18px;">🎮 游戏体验数据</h3>
+                                
+                                <div class="game-scores" style="margin-bottom: 30px;">
+                                    <h4 style="margin-top: 0; margin-bottom: 15px; color: #555; font-size: 16px;">学生游戏得分</h4>
+                                    <div id="student-game-scores" class="student-game-scores" style="margin-top: 10px;">
+                                        <!-- 学生游戏得分将在这里动态显示 -->
+                                    </div>
+                                </div>
+                                
+                                <div class="game-shares" style="margin-bottom: 20px;">
+                                    <h4 style="margin-top: 0; margin-bottom: 15px; color: #555; font-size: 16px;">学生分享内容</h4>
+                                    <div id="student-game-shares" class="student-game-shares" style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px; padding: 15px; background-color: #f0f2f5; margin-bottom: 10px;">
+                                        <!-- 学生分享内容将在这里动态显示 -->
+                                    </div>
+                                    <!-- 教师发送信息表单 -->
+                                    <div class="teacher-share-form" style="background-color: white; border-radius: 8px; padding: 10px; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); display: flex; align-items: flex-end;">
+                                        <textarea id="teacher-share-content" class="form-control" rows="1" placeholder="请输入您的信息..." style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; resize: none; font-family: inherit; max-height: 100px;"></textarea>
+                                        <button id="teacher-share-btn" class="btn btn-primary" style="margin-left: 10px; padding: 10px 20px; border: none; border-radius: 20px; background-color: #07C160; color: white; font-size: 14px; cursor: pointer; white-space: nowrap;">发送</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            
+
+                            
+
+                        </div>
+                    </div>
+                    
+                    <!-- 情景警示 -->
+                    <div id="teacher-warning" class="content-section">
+                        <h2>情景警示</h2>
+                        <div class="warning-content">
+                            <!-- 视频列表 -->
+                            <div class="video-list">
+                                <h4>课堂视频</h4>
+                                <div class="video-grid">
+                                    <div class="video-item">
+                                        <a href="疲劳驾驶.mp4" target="_blank" class="video-link">
+                                            <div class="video-icon">📹</div>
+                                            <h5>疲劳驾驶案例分析</h5>
+                                            <p>课堂讲解疲劳驾驶的危害</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.stats.gov.cn/zt_18555/ztsj/hstjnj/sh2007/202303/t20230303_1926121.html" target="_blank" class="video-link">
+                                            <div class="video-icon">📊</div>
+                                            <h5>事故数据统计</h5>
+                                            <p>真实数据展示</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.bilibili.com/video/BV14a4y1S7LV/" target="_blank" class="video-link">
+                                            <div class="video-icon">⚡</div>
+                                            <h5>应急处理技巧</h5>
+                                            <p>如何应对疲劳驾驶</p>
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                <h4>在线视频</h4>
+                                <div class="video-grid">
+                                    <div class="video-item">
+                                        <a href="https://www.bilibili.com/video/BV18u9NBcEhL" target="_blank" class="video-link">
+                                            <div class="video-icon">🚗</div>
+                                            <h5>车祸现场警示</h5>
+                                            <p>Bilibili视频</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.bilibili.com/video/BV1Zf421d7y6/" target="_blank" class="video-link">
+                                            <div class="video-icon">⚠️</div>
+                                            <h5>疲劳驾驶危害</h5>
+                                            <p>真实案例分析</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.bilibili.com/video/BV1xQ4y1W7PV/" target="_blank" class="video-link">
+                                            <div class="video-icon">🛑</div>
+                                            <h5>安全驾驶指南</h5>
+                                            <p>预防疲劳驾驶</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item more">
+                                        <a href="https://www.bilibili.com/video/BV1nM4m1R79M/?spm_id_from=333.337.search-card.all.click" target="_blank" class="video-link">
+                                            <div class="video-icon">➕</div>
+                                            <h5>更多视频</h5>
+                                            <p>点击查看更多</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    
+                    <!-- 对比体验 -->
+                    <div id="teacher-comparison" class="content-section">
+                        <h2>对比体验</h2>
+                        <div class="comparison-content">
+                            <!-- 自动小车优势及条件分享 -->
+                            <div class="comparison-share" style="background-color: #f8f9fa; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                                <h3 style="margin-top: 0; margin-bottom: 20px; color: #333; font-size: 18px;">🤖 对比闭眼操控小车，自动小车的优势及实现条件</h3>
+                                <div class="share-container" style="background-color: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #ddd;">
+                                    <!-- 分享列表 -->
+                                    <div id="teacher-comparison-share-items" class="share-items" style="max-height: 400px; overflow-y: auto; margin-bottom: 20px;">
+                                        <!-- 分享内容将在这里动态显示 -->
+                                    </div>
+                                    <!-- 教师发送信息表单 -->
+                                    <div class="share-form" style="background-color: #f8f9fa; border-radius: 8px; padding: 15px;">
+                                        <h4 style="margin-top: 0; margin-bottom: 15px; color: #555; font-size: 16px;">发送信息</h4>
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <textarea id="teacher-comparison-share-content" class="form-control" rows="3" placeholder="请输入您的信息..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical; font-family: inherit;"></textarea>
+                                        </div>
+                                        <button id="teacher-comparison-share-btn" class="btn btn-primary" style="width: 100%; padding: 10px; border: none; border-radius: 4px; background-color: #4CAF50; color: white; font-size: 14px; cursor: pointer;">发送</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 动手实操 -->
+                    <div id="teacher-practice" class="content-section">
+                        <h2>动手实操</h2>
+                        <div class="practice-content">
+                            <!-- 认识循迹小车的"眼睛"及工作过程 -->
+                            <div class="practice-section">
+                                <h3>👁️ 认识循迹小车的"眼睛"及工作过程</h3>
+                                <p>循迹小车的"眼睛"通常是指红外传感器或光电传感器，它们能够检测地面的明暗变化，帮助小车识别预设的路线。</p>
+
+
+                                
+                                <!-- 学生提交的逻辑表数据 -->
+                                <div class="table-section" style="margin-top: 40px;">
+                                    <h4>📋 学生提交的逻辑表数据</h4>
+                                    <div style="margin-top: 20px;">
+                                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                                            <thead>
+                                                <tr style="background-color: #f8f9fa;">
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">小组</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">时间</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">正在线上</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">车身偏右</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">车身偏左</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="student-tracking-data">
+                                                <!-- 学生提交的逻辑表数据将在这里动态显示 -->
+                                                <tr>
+                                                    <td colspan="5" style="border: 1px solid #ddd; padding: 20px; text-align: center; color: #999;">暂无学生提交数据</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 系统建模 -->
+                            <div class="practice-section">
+                                <h3>📊 系统建模</h3>
+                                <p>系统建模是理解闭环控制系统的重要步骤，通过建立框图，可以分析系统的性能。</p>
+                                <p>建模步骤：</p>
+                                <p>第一步：提炼逻辑</p>
+                                <p>在这个循迹小车控制系统中：</p>
+                                
+                                <!-- 学生提交的系统建模答案 -->
+                                <div class="table-section" style="margin: 20px 0;">
+                                    <h4>📋 学生提交的系统建模答案</h4>
+                                    <div style="margin-top: 20px;">
+                                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                                            <thead>
+                                                <tr style="background-color: #f8f9fa;">
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">小组</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">时间</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">检测装置</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">控制装置</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">执行装置</th>
+                                                    <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">被控对象</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="student-modeling-data">
+                                                <!-- 学生提交的系统建模答案将在这里动态显示 -->
+                                                <tr>
+                                                    <td colspan="6" style="border: 1px solid #ddd; padding: 20px; text-align: center; color: #999;">暂无学生提交数据</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+
+                                <p>输入信号是预设轨迹，【循迹传感器】检测到小车的实际行驶轨迹返回到控制系统的输入端，通过一个具有计算功能的装置（比较器），与设定的轨道位置作比较。当实际位置与设定位置偏离时，【控制电路】控制【电机】转动，改变【小车】的行驶状态。</p>
+                                <p>第二步：系统建模</p>
+                                <!-- 闭环控制系统方框图 -->
+                                <div class="system-diagram" style="margin-top: 30px; padding: 30px; background-color: #f8f9fa; border-radius: 8px; overflow-x: auto;">
+                                    <h4>📈 闭环控制系统方框图</h4>
+                                    <div style="display: flex; justify-content: center;">
+                                        <img src="答案2.png" alt="闭环控制系统方框图" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                    </div>
+                                </div>
+                                
+
+                                
+                                <!-- 学生上传的照片 -->
+                                <div class="student-photos" style="margin-top: 40px;">
+                                    <h4>📷 学生上传的照片</h4>
+                                    <div id="student-photos-container" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+                                        <!-- 学生上传的照片将在这里动态显示 -->
+                                        <div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: #999; border: 1px dashed #ddd; border-radius: 8px;">
+                                            暂无学生上传照片
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 自由讨论模块 -->
+                                <div class="discussion-module" style="margin-top: 40px; border: 2px solid #e0e0e0; border-radius: 12px; background-color: #f5f5f5; overflow: hidden;">
+                                    <div class="discussion-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <span style="font-size: 24px;">💬</span>
+                                            <h4 style="margin: 0; font-size: 16px; font-weight: 600;">如果拔掉传感器的线，会发生什么...（辨析开闭环的区别）</h4>
+                                        </div>
+                                        <span style="font-size: 12px; opacity: 0.9;">自由讨论区</span>
+                                    </div>
+                                    
+                                    <!-- 讨论消息列表 -->
+                                    <div id="teacher-discussion-messages" class="discussion-messages" style="height: 300px; overflow-y: auto; padding: 15px; background-color: #fafafa;">
+                                        <!-- 消息将动态加载到这里 -->
+                                    </div>
+                                    
+                                    <!-- 输入区域 -->
+                                    <div class="discussion-input-area" style="padding: 15px; background-color: white; border-top: 1px solid #e0e0e0;">
+                                        <div style="display: flex; gap: 10px; align-items: flex-end;">
+                                            <div style="flex: 1;">
+                                                <textarea id="teacher-discussion-input" class="form-control" placeholder="发表你的看法..." style="resize: none; min-height: 60px; border-radius: 8px; border: 1px solid #ddd; padding: 10px; width: 100%; font-family: inherit;"></textarea>
+                                            </div>
+                                            <button id="teacher-send-discussion-btn" class="btn btn-primary" onclick="sendTeacherDiscussionMessage()" style="padding: 12px 24px; border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; cursor: pointer; font-weight: 500;">
+                                                发送
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 闭环控制系统的工作过程 -->
+                            <div class="practice-section">
+                                <h3>🔄 闭环控制系统的工作过程</h3>
+                                <p>闭环控制系统通过反馈机制实现对系统的精确控制</p>
+                                
+                                <!-- 闭环方框图图片 -->
+                                <div style="margin-top: 30px; display: flex; justify-content: center;">
+                                    <img src="闭环.png" alt="闭环方框图" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                </div>
+                                
+                                <!-- 反馈的概念 -->
+                                <div style="margin-top: 30px;">
+                                    <h4>📌 反馈的概念</h4>
+                                    <p>反馈是指将系统的输出信号返回到输入端，与输入信号进行比较，从而调整系统的控制行为。在闭环控制系统中，反馈是实现精确控制的关键机制。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+			        <!-- 原理升华 -->
+                    <div id="teacher-principle" class="content-section">
+                        <h2>原理升华</h2>
+                        <div class="principle-content">
+                            <!-- 视频模块 -->
+                            <div class="video-list">
+                                <h3>🎥 智能驾驶视频</h3>
+                                <div class="video-grid">
+                                    <div class="video-item">
+                                        <a href="智能驾驶.mp4" target="_blank" class="video-link">
+                                            <div class="video-icon">🚗</div>
+                                            <h5>智能驾驶演示</h5>
+                                            <p>智能驾驶技术原理演示视频</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 智能驾驶资料模块 -->
+                            <div class="video-list">
+                                <h3>📚 智能驾驶资料</h3>
+                                <div class="video-grid">
+                                    <div class="video-item">
+                                        <a href="https://www.pcauto.com.cn/gl/88175.html" target="_blank" class="video-link">
+                                            <div class="video-icon">📖</div>
+                                            <h5>智能驾驶技术原理</h5>
+                                            <p>百度百科 - 智能驾驶技术详解</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.tencent.com/zh-cn/articles/123456" target="_blank" class="video-link">
+                                            <div class="video-icon">🔬</div>
+                                            <h5>自动驾驶技术发展</h5>
+                                            <p>腾讯科技 - 自动驾驶技术发展报告</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.alibaba.com/ai/autonomous-driving" target="_blank" class="video-link">
+                                            <div class="video-icon">🤖</div>
+                                            <h5>AI在智能驾驶中的应用</h5>
+                                            <p>阿里巴巴 - AI技术在自动驾驶中的应用</p>
+                                        </a>
+                                    </div>
+                                    <div class="video-item">
+                                        <a href="https://www.baidu.com/s?wd=智能驾驶安全标准" target="_blank" class="video-link">
+                                            <div class="video-icon">🛡️</div>
+                                            <h5>智能驾驶安全标准</h5>
+                                            <p>百度百科 - 智能驾驶安全标准</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 学习分享模块 -->
+                            <div class="learning-share">
+                                <h3>💬 学习分享</h3>
+                                <div class="share-container">
+                                    <!-- 分享列表 -->
+                                    <div id="teacher-principle-share-items" class="share-items" style="max-height: 400px; overflow-y: auto; margin-bottom: 20px;">
+                                        <!-- 分享内容将在这里动态显示 -->
+                                    </div>
+                                    <!-- 分享表单 -->
+                                    <div class="share-form" style="background-color: #f8f9fa; border-radius: 8px; padding: 15px;">
+                                        <h4 style="margin-top: 0; margin-bottom: 15px; color: #555; font-size: 16px;">发送信息</h4>
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <textarea id="teacher-principle-share-content" class="form-control" rows="3" placeholder="请分享你的学习心得..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical; font-family: inherit;"></textarea>
+                                        </div>
+                                        <button id="teacher-principle-share-btn" class="btn btn-primary" style="width: 100%; padding: 10px; border: none; border-radius: 4px; background-color: #4CAF50; color: white; font-size: 14px; cursor: pointer;">发送</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 作业管理 -->
+                    <div id="teacher-homework" class="content-section">
+                        <h2>作业管理</h2>
+                        <div class="homework-content">
+                            <!-- 未批改作业卡片 -->
+                            <div class="dashboard-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); text-align: center;">
+                                <div class="card-icon" style="font-size: 32px; margin-bottom: 10px;">✏️</div>
+                                <h3 style="font-size: 18px; margin-bottom: 10px;">未批改作业</h3>
+                                <p id="pending-homeworks-count" style="font-size: 24px; font-weight: bold; margin-bottom: 15px;">5 份作业</p>
+                                <button id="view-pending-homeworks-btn" class="btn btn-light" style="padding: 8px 16px; font-size: 14px; border-radius: 6px; color: #333;">查看详情</button>
+                            </div>
+                            
+                            <!-- 快速操作 -->
+                            <div class="quick-actions" style="background-color: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);">
+                                <h3 style="margin-top: 0; font-size: 18px; color: #333; margin-bottom: 20px;">快速操作</h3>
+                                <div class="action-buttons" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                                    <button class="btn btn-secondary" id="assign-homework-btn" style="padding: 12px 24px; font-size: 16px; border-radius: 8px; transition: all 0.3s ease;">布置作业</button>
+                                    <button class="btn btn-secondary" id="publish-answer-btn" style="padding: 12px 24px; font-size: 16px; border-radius: 8px; transition: all 0.3s ease;">发布答案</button>
+                                </div>
+                            </div>
+                            
+                            <!-- 发布答案模态框 -->
+                            <div id="answer-modal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+                                <div class="modal-content" style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 8px;">
+                                    <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                        <h3>发布答案</h3>
+                                        <span class="close" style="color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+                                    </div>
+                                    <form id="answer-form">
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label for="answer-url" style="display: block; margin-bottom: 5px; font-weight: 600;">答案图片URL</label>
+                                            <input type="text" id="answer-url" placeholder="请输入答案图片URL" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                                        </div>
+                                        <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                                            <button type="button" class="btn btn-secondary" id="cancel-answer-btn">取消</button>
+                                            <button type="submit" class="btn btn-primary">发布答案</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <!-- 未批改作业列表 -->
+                            <div id="pending-homeworks-list" class="pending-homeworks-list" style="display: none; background-color: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);">
+                                <h3 style="margin-top: 0; font-size: 18px; color: #333; margin-bottom: 20px; display: flex; align-items: center;">
+                                    <span style="margin-right: 10px;">📋</span> 未批改作业
+                                </h3>
+                                <div id="pending-homeworks-items" class="pending-homeworks-items">
+                                    <!-- 未批改作业将在这里动态显示 -->
+                                </div>
+                            </div>
+                            
+                            <!-- 已批改作业列表 -->
+                            <div id="graded-homeworks-list" class="graded-homeworks-list" style="display: none; background-color: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); margin-top: 20px;">
+                                <h3 style="margin-top: 0; font-size: 18px; color: #333; margin-bottom: 20px; display: flex; align-items: center;">
+                                    <span style="margin-right: 10px;">✅</span> 已批改作业
+                                </h3>
+                                <div id="graded-homeworks-items" class="graded-homeworks-items">
+                                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                                        <thead>
+                                            <tr style="background-color: #f8f9fa; border-bottom: 2px solid #e9ecef;">
+                                                <th style="padding: 12px; text-align: left; font-weight: 600; color: #333;">学生用户名</th>
+                                                <th style="padding: 12px; text-align: left; font-weight: 600; color: #333;">作业名称</th>
+                                                <th style="padding: 12px; text-align: left; font-weight: 600; color: #333;">作业等级</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="graded-homeworks-table-body">
+                                            <!-- 已批改作业将在这里动态显示 -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- 布置作业模态框 -->
+                            <div id="homework-modal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+                                <div class="modal-content" style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 8px;">
+                                    <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                        <h3>布置作业</h3>
+                                        <span class="close" style="color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+                                    </div>
+                                    <form id="homework-form">
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label for="homework-title" style="display: block; margin-bottom: 5px; font-weight: 600;">作业标题</label>
+                                            <input type="text" id="homework-title" placeholder="请输入作业标题" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label for="homework-content" style="display: block; margin-bottom: 5px; font-weight: 600;">作业内容</label>
+                                            <textarea id="homework-content" placeholder="请输入作业内容" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical; min-height: 100px;"></textarea>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label for="homework-deadline" style="display: block; margin-bottom: 5px; font-weight: 600;">截止日期</label>
+                                            <input type="datetime-local" id="homework-deadline" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                                        </div>
+                                        <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                                            <button type="button" class="btn btn-secondary" id="cancel-homework-btn">取消</button>
+                                            <button type="submit" class="btn btn-primary">发布作业</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <!-- 批改作业模态框 -->
+                            <div id="grade-homework-modal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+                                <div class="modal-content" style="background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 800px; border-radius: 8px;">
+                                    <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                        <h3 id="grade-modal-homework-title">批改作业</h3>
+                                        <span class="close" style="color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">作业内容</label>
+                                            <div id="grade-homework-content" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; background-color: #f8f9fa; min-height: 100px;"></div>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">学生答案</label>
+                                            <div id="grade-homework-answer" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; background-color: #f8f9fa; min-height: 100px;"></div>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">等级</label>
+                                            <div style="display: flex; gap: 10px;">
+                                                <label style="display: flex; align-items: center; gap: 5px;">
+                                                    <input type="radio" name="homework-grade" value="A"> A
+                                                </label>
+                                                <label style="display: flex; align-items: center; gap: 5px;">
+                                                    <input type="radio" name="homework-grade" value="B"> B
+                                                </label>
+                                                <label style="display: flex; align-items: center; gap: 5px;">
+                                                    <input type="radio" name="homework-grade" value="C"> C
+                                                </label>
+                                                <label style="display: flex; align-items: center; gap: 5px;">
+                                                    <input type="radio" name="homework-grade" value="D"> D
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label for="homework-score" style="display: block; margin-bottom: 5px; font-weight: 600;">评分</label>
+                                            <input type="number" id="homework-score" min="0" max="100" placeholder="请输入评分" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label for="homework-feedback" style="display: block; margin-bottom: 5px; font-weight: 600;">评语</label>
+                                            <textarea id="homework-feedback" rows="5" placeholder="请输入评语..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical;"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                                        <button type="button" class="btn btn-secondary" id="cancel-grade-homework-btn">取消</button>
+                                        <button type="button" class="btn btn-primary" id="submit-grade-homework-btn">提交批改</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                        </div>
+                    </div>
+                    
+                    <!-- 资源库 -->
+                    <div id="teacher-resources" class="content-section">
+                        <h2>资源库</h2>
+                        <div class="resources-content">
+                            <!-- 资源列表 -->
+                            <div class="resource-list">
+                                <h3>📦 资源列表</h3>
+                                <div id="resources-container" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+                                    <!-- 资源列表将在这里动态显示 -->
+                                    <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: #999; border: 1px dashed #ddd; border-radius: 8px;">
+                                        暂无资源
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 课堂互动 -->
+                    <div id="teacher-classroom" class="content-section">
+                        <h2>课堂互动</h2>
+                        <div class="classroom-content">
+                            <div class="interactive-tasks">
+                                <h3>互动任务管理</h3>
+                                <div class="task-item">
+                                    <div class="task-info">
+                                        <h4>AI游戏小车体验反馈</h4>
+                                        <p>状态：进行中</p>
+                                        <p>参与人数：38/40</p>
+                                    </div>
+                                    <div class="task-actions">
+                                        <button class="btn btn-sm btn-primary">查看反馈</button>
+                                        <button class="btn btn-sm btn-secondary">结束任务</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="create-task-section">
+                                <h3>发起新互动任务</h3>
+                                <form id="create-task-form">
+                                    <div class="form-group">
+                                        <label for="task-title">任务标题</label>
+                                        <input type="text" id="task-title" placeholder="请输入任务标题" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="task-type">任务类型</label>
+                                        <select id="task-type" required>
+                                            <option value="">请选择任务类型</option>
+                                            <option value="feedback">反馈收集</option>
+                                            <option value="vote">投票</option>
+                                            <option value="quiz">问答</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="task-content">任务内容</label>
+                                        <textarea id="task-content" placeholder="请输入任务内容" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="task-class">所属班级</label>
+                                        <select id="task-class" required>
+                                            <option value="">请选择班级</option>
+                                            <option value="class1">高一（1）班</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">发起任务</button>
+                                </form>
+                            </div>
+                            <div class="question-box">
+                                <h3>问题收集箱</h3>
+                                <div class="question-list">
+                                    <div class="question-item">
+                                        <div class="question-content">
+                                            <p>什么是闭环控制系统的反馈机制？</p>
+                                            <p class="question-author">学生：小组1</p>
+                                            <p class="question-time">2024-01-15</p>
+                                        </div>
+                                        <button class="btn btn-sm btn-primary">解答</button>
+                                    </div>
+                                    <div class="question-item">
+                                        <div class="question-content">
+                                            <p>循迹小车是如何实现自动控制的？</p>
+                                            <p class="question-author">学生：小组2</p>
+                                            <p class="question-time">2024-01-14</p>
+                                        </div>
+                                        <button class="btn btn-sm btn-primary">解答</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    
+                    <!-- 视频上传模态框 -->
+
+			</div>
+        </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>

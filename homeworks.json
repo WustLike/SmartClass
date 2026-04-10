@@ -1,0 +1,25 @@
+[
+  {
+    "id": 1775760401560,
+    "title": "开灯控制",
+    "content": "找出被控制对象",
+    "deadline": "2026-04-30T02:46",
+    "assignedAt": "2026-04-09T18:46:41.560Z",
+    "status": "pending"
+  },
+  {
+    "id": 1775760419544,
+    "title": "开灯控制",
+    "content": "找出被控制对象",
+    "deadline": "2026-04-30T02:46",
+    "assignedAt": "2026-04-09T18:46:41.560Z",
+    "status": "graded",
+    "student": "小组2",
+    "answer": "灯💡",
+    "submittedAt": "2026-04-09T18:46:59.544Z",
+    "score": "100",
+    "grade": "A",
+    "feedback": "好",
+    "gradedAt": "2026-04-09T18:47:17.215Z"
+  }
+]

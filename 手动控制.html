@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="screen-orientation" content="landscape">
+<meta name="x5-orientation" content="landscape">
+<title>5车道避障游戏</title>
+<style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{
+        width:100%;height:100%;background:#111;color:#fff;
+        font-family:Arial,sans-serif;overflow:hidden;
+        touch-action:manipulation;
+        -webkit-text-size-adjust:100%;
+    }
+    #portraitTip{
+        position:fixed;top:0;left:0;width:100%;height:100%;
+        background:#111;z-index:9999;display:none;
+        flex-direction:column;justify-content:center;align-items:center;
+        color:#09c;font-size:20px;text-align:center;
+    }
+    @keyframes rotatePhone{
+        0%{transform:rotate(0deg);}50%{transform:rotate(90deg);}100%{transform:rotate(0deg);}
+    }
+    .box{
+        width:100%;height:100%;max-width:900px;margin:0 auto;
+        display:flex;flex-direction:column;padding:8px;
+    }
+    .top-info{
+        font-size:24px;font-weight:bold;padding:10px 0;text-align:center;
+        color:#09c;text-shadow:0 0 8px rgba(0,153,204,0.4);flex-shrink:0;
+    }
+    .road{
+        flex:1;background:#222;border:2px solid #fff;border-radius:12px;
+        position:relative;overflow:hidden;min-height:200px;
+        box-shadow:0 0 20px rgba(255,255,255,0.1);
+    }
+    .lane{
+        position:absolute;width:20%;height:100%;border-right:1px dashed #444;
+    }
+    .virtual-straight {
+        position:absolute;width:40px;height:300px;bottom:100px;
+        background:linear-gradient(to top,rgba(0,255,0,0.25),transparent);
+        border-radius:4px;pointer-events:none;margin-left:-20px;z-index:1;
+    }
+    .virtual-straight::after {
+        content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);
+        width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;
+        border-bottom:16px solid rgba(0,255,0,0.6);
+    }
+    .virtual-straight::before {
+        content:"";position:absolute;top:35px;left:50%;transform:translateX(-50%);
+        width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;
+        border-bottom:12px solid rgba(0,255,0,0.5);
+    }
+    .car {
+        width:42px;height:70px;background:#00c853;position:absolute;bottom:40px;
+        transition:left 0.14s ease;border-radius:10px 10px 5px 5px;margin-left:-21px;
+        box-shadow:0 0 20px #00c853;z-index:2;
+        animation:carFloat 0.4s infinite alternate ease-in-out;
+    }
+    @keyframes carFloat {
+        from{transform:translateY(0);}to{transform:translateY(-1.5px);}
+    }
+    .car::before {
+        content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);
+        width:34px;height:22px;background:#009629;border-radius:6px;
+    }
+    .car::after {
+        content:"";position:absolute;top:9px;left:50%;transform:translateX(-50%);
+        width:24px;height:10px;background:#e0f7fa;border-radius:2px;
+        box-shadow:-16px 14px 0 1px #fff,16px 14px 0 1px #fff;
+    }
+    .wheel {
+        position:absolute;width:9px;height:12px;background:#111;
+        border:2px solid #333;border-radius:2px;
+    }
+    .fl{top:4px;left:4px;}.fr{top:4px;right:4px;}
+    .rl{bottom:0;left:4px;}.rr{bottom:0;right:4px;}
+    .obs{
+        width:40px;height:40px;background:#f30;position:absolute;border-radius:6px;
+        margin-left:-20px;box-shadow:0 0 12px #f30;z-index:1;
+    }
+    .over{
+        position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+        font-size:40px;color:#f00;font-weight:bold;display:none;z-index:10;
+        text-shadow:0 0 10px #f00;
+    }
+    .ctrl{
+        display:flex;gap:16px;justify-content:center;margin:10px 0;flex-shrink:0;
+    }
+    .ctrl button{
+        padding:16px 28px;font-size:18px;background:#333;color:#fff;
+        border:none;border-radius:12px;transition:0.2s;
+        box-shadow:0 0 8px rgba(255,255,255,0.1);-webkit-tap-highlight-color:transparent;
+    }
+    .ctrl button:active{background:#555;transform:scale(0.95);}
+    #startBtn{
+        position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);
+        width:280px;height:90px;font-size:34px;background:#09c;color:#fff;
+        font-weight:bold;border:none;border-radius:18px;z-index:99;
+        box-shadow:0 0 20px rgba(0,153,204,0.5);transition:0.2s;
+        -webkit-tap-highlight-color:transparent;
+    }
+    #startBtn:active{transform:translate(-50%,-50%) scale(0.95);}
+
+    .rule-box{
+        position:absolute;top:65%;left:50%;transform:translate(-50%,-50%);
+        background:rgba(0,0,0,0.75);padding:20px 24px;border-radius:14px;
+        border:1px solid #09c;font-size:15px;line-height:1.7;color:#eee;
+        z-index:98;width:90%;max-width:420px;text-align:left;
+        box-shadow:0 0 20px rgba(0,153,204,0.2);
+    }
+    .rule-box h4{
+        text-align:center;margin-bottom:10px;color:#09c;font-size:20px;
+    }
+    .rule-box p{
+        margin:4px 0;
+    }
+
+    .lane-select{
+        position:absolute;top:35%;left:50%;transform:translate(-50%,-50%);
+        background:rgba(0,0,0,0.85);padding:22px;border-radius:14px;
+        border:2px solid #09c;z-index:100;display:none;
+        box-shadow:0 0 30px rgba(0,153,204,0.3);width:90%;max-width:400px;
+    }
+    .lane-select h4{
+        text-align:center;margin-bottom:16px;font-size:22px;color:#09c;
+    }
+    .lane-buttons{
+        display:flex;gap:10px;justify-content:center;
+        flex-wrap:nowrap !important;white-space:nowrap;
+    }
+    .lane-btn{
+        width:60px;height:60px;line-height:60px;text-align:center;
+        background:#333;border:2px solid #666;border-radius:12px;
+        font-size:18px;cursor:pointer;transition:0.2s;
+        flex-shrink:0;
+    }
+    .lane-btn.active{
+        background:#09c;border-color:#fff;box-shadow:0 0 10px #09c;
+    }
+    .confirm-lane{
+        margin-top:16px;padding:12px 0;font-size:18px;background:#09c;
+        border:none;border-radius:12px;color:#fff;cursor:pointer;transition:0.2s;
+        width:100%;
+    }
+
+    #pauseBtn{
+        position:absolute;top:20px;right:20px;z-index:90;padding:12px 22px;
+        font-size:18px;background:#333;color:#fff;border:none;border-radius:12px;
+        cursor:pointer;transition:0.2s;
+        -webkit-tap-highlight-color:transparent;
+    }
+    .pause-mask{
+        position:absolute;top:0;left:0;width:100%;height:100%;
+        background:rgba(0,0,0,0.85);z-index:80;display:none;
+        justify-content:center;align-items:center;
+    }
+    .pause-text{
+        font-size:56px;color:#fff;font-weight:bold;text-shadow:0 0 10px #09c;
+    }
+    #resumeBtn{
+        margin-top:24px;padding:14px 30px;font-size:22px;background:#09c;
+        border:none;border-radius:14px;color:#fff;cursor:pointer;
+    }
+    .score-add{
+        position:absolute;color:#ffff00;font-size:28px;font-weight:bold;
+        z-index:5;opacity:0.2;pointer-events:none;
+        animation:scoreFloat 1s ease-out forwards;
+    }
+    .score-sub{
+        position:absolute;color:#ff4444;font-size:28px;font-weight:bold;
+        z-index:5;opacity:0.2;pointer-events:none;
+        animation:scoreFloat 1s ease-out forwards;
+    }
+    @keyframes scoreFloat {
+        0%{transform:translateY(0);opacity:0.2;}
+        50%{transform:translateY(-20px);opacity:0.2;}
+        100%{transform:translateY(-40px);opacity:0;}
+    }
+    @media screen and (max-width:768px) and (orientation:portrait){
+        .box{display:none;}#portraitTip{display:flex;}
+    }
+</style>
+</head>
+<body>
+
+<div id="portraitTip">
+    <div style="animation:rotatePhone 1.5s infinite;font-size:60px;margin-bottom:20px">📱</div>
+    <p>请横屏游玩</p>
+</div>
+
+<div class="box">
+    <div class="top-info">分数：<span id="score">0</span></div>
+    <div class="over" id="over">游戏结束</div>
+    <div class="road">
+        <div class="lane" style="left:0"></div>
+        <div class="lane" style="left:20%"></div>
+        <div class="lane" style="left:40%"></div>
+        <div class="lane" style="left:60%"></div>
+        <div class="lane" style="left:80%"></div>
+        <div id="virtualStraight" class="virtual-straight"></div>
+        <div class="car" id="car">
+            <div class="wheel fl"></div><div class="wheel fr"></div>
+            <div class="wheel rl"></div><div class="wheel rr"></div>
+        </div>
+    </div>
+    <div class="ctrl">
+        <button onclick="moveLeft()">← 左</button>
+        <button onclick="moveRight()">右 →</button>
+    </div>
+</div>
+
+<button id="startBtn">开始游戏</button>
+
+<div class="rule-box">
+    <h4>🎮 游戏规则</h4>
+    <p>1. 开局选择一条车道作为你的固定车道</p>
+    <p>2. 固定车道无障碍物时变道，扣5分</p>
+    <p>3. 固定车道有障碍物，躲避后3秒内返回，+10分</p>
+    <p>4. 其他车道障碍物不加分</p>
+    <p>5. 碰到障碍物游戏立即结束</p>
+</div>
+
+<div class="lane-select" id="laneSelect">
+    <h4>选择初始车道</h4>
+    <div class="lane-buttons">
+        <div class="lane-btn" data-lane="0">1</div>
+        <div class="lane-btn" data-lane="1">2</div>
+        <div class="lane-btn active" data-lane="2">3</div>
+        <div class="lane-btn" data-lane="3">4</div>
+        <div class="lane-btn" data-lane="4">5</div>
+    </div>
+    <button class="confirm-lane" onclick="confirmLane()">确认选择</button>
+</div>
+
+<button id="pauseBtn">暂停</button>
+<div class="pause-mask" id="pauseMask">
+    <div>
+        <div class="pause-text">游戏暂停</div>
+        <button id="resumeBtn" onclick="resumeGame()">继续游戏</button>
+    </div>
+</div>
+
+<script>
+const car = document.getElementById('car');
+const road = document.querySelector('.road');
+const scoreText = document.getElementById('score');
+const overText = document.getElementById('over');
+const startBtn = document.getElementById('startBtn');
+const ruleBox = document.querySelector('.rule-box');
+const virtualStraight = document.getElementById('virtualStraight');
+const laneSelect = document.getElementById('laneSelect');
+const laneButtons = document.querySelectorAll('.lane-btn');
+const pauseBtn = document.getElementById('pauseBtn');
+const pauseMask = document.getElementById('pauseMask');
+
+function getLaneCenter(){
+    let w = road.clientWidth;
+    return [w*0.1, w*0.3, w*0.5, w*0.7, w*0.9];
+}
+
+let laneCenter = getLaneCenter();
+let currentLane = 2;
+let targetLane = 2;
+let score = 0;
+let speed = 1.2;
+let gameRunning = false;
+let obsList = [];
+let lastAvoidObsTime = 0;
+let gamePaused = false;
+let animationFrameId = 0;
+
+car.style.left = laneCenter[currentLane] + 'px';
+virtualStraight.style.left = laneCenter[currentLane] + 'px';
+
+window.addEventListener('resize', ()=>{
+    laneCenter = getLaneCenter();
+    car.style.left = laneCenter[currentLane] + 'px';
+    virtualStraight.style.left = laneCenter[currentLane] + 'px';
+    checkOrientation();
+});
+
+function checkOrientation(){
+    if(window.innerWidth < window.innerHeight && window.innerWidth <= 768){
+        document.getElementById('portraitTip').style.display = 'flex';
+        document.querySelector('.box').style.display = 'none';
+    }else{
+        document.getElementById('portraitTip').style.display = 'none';
+        document.querySelector('.box').style.display = 'flex';
+    }
+}
+checkOrientation();
+
+laneButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        laneButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        targetLane = parseInt(btn.dataset.lane);
+    });
+});
+
+function confirmLane() {
+    currentLane = targetLane;
+    car.style.left = laneCenter[currentLane] + 'px';
+    virtualStraight.style.left = laneCenter[currentLane] + 'px';
+    laneSelect.style.display = 'none';
+    spawnObs();
+    gameLoop();
+}
+
+// 判断目标车道是否有障碍物
+function hasObstacleInTargetLane() {
+    return obsList.some(obj => obj.lane === targetLane);
+}
+
+// 扣分动画
+function showScoreSub() {
+    const sub = document.createElement('div');
+    sub.className = 'score-sub';
+    sub.textContent = '-5';
+    sub.style.left = (parseFloat(car.style.left) + 10) + 'px';
+    sub.style.top = (parseFloat(car.style.top) - 20) + 'px';
+    road.appendChild(sub);
+    setTimeout(() => sub.remove(), 1000);
+}
+
+function moveLeft(){
+    if(!gameRunning || gamePaused) return;
+
+    // 目标车道没障碍物 → 变道扣5分
+    if (currentLane === targetLane && !hasObstacleInTargetLane()) {
+        score -= 5;
+        scoreText.textContent = score;
+        showScoreSub();
+    }
+
+    if(currentLane > 0) currentLane--;
+    car.style.left = laneCenter[currentLane] + 'px';
+    virtualStraight.style.left = laneCenter[currentLane] + 'px';
+    checkBackToTargetLane();
+}
+function moveRight(){
+    if(!gameRunning || gamePaused) return;
+
+    // 目标车道没障碍物 → 变道扣5分
+    if (currentLane === targetLane && !hasObstacleInTargetLane()) {
+        score -= 5;
+        scoreText.textContent = score;
+        showScoreSub();
+    }
+
+    if(currentLane < 4) currentLane++;
+    car.style.left = laneCenter[currentLane] + 'px';
+    virtualStraight.style.left = laneCenter[currentLane] + 'px';
+    checkBackToTargetLane();
+}
+
+// 只有自己车道避障回来才加分
+function checkBackToTargetLane() {
+    if (!gameRunning || gamePaused) return;
+    if (lastAvoidObsTime <= 0) return;
+
+    if (currentLane === targetLane && (Date.now() - lastAvoidObsTime) <= 3000) {
+        score += 10;
+        scoreText.textContent = score;
+        showScoreAdd();
+        lastAvoidObsTime = 0;
+    }
+}
+
+function showScoreAdd() {
+    const scoreAdd = document.createElement('div');
+    scoreAdd.className = 'score-add';
+    scoreAdd.textContent = '+10';
+    scoreAdd.style.left = (parseFloat(car.style.left) + 10) + 'px';
+    scoreAdd.style.top = (parseFloat(car.style.top) - 20) + 'px';
+    road.appendChild(scoreAdd);
+    setTimeout(() => scoreAdd.remove(), 1000);
+}
+
+// ✅ 障碍物减少（间隔变大）
+function spawnObs(){
+    if(!gameRunning || gamePaused) return;
+    let lane = Math.floor(Math.random()*5);
+    let div = document.createElement('div');
+    div.className = 'obs';
+    div.style.left = laneCenter[lane] + 'px';
+    div.style.top = '0px';
+    road.appendChild(div);
+    obsList.push({el:div, lane:lane});
+
+    // 障碍物生成间隔变大 → 更少
+    let baseDelay = 900 - 50 * (speed - 1.2);
+    let minDelay = Math.max(400, baseDelay);
+    setTimeout(spawnObs, minDelay + Math.random()*150);
+}
+
+function gameLoop(){
+    if(!gameRunning || gamePaused) return;
+    speed += 0.0012;
+
+    obsList.forEach((obj,i)=>{
+        let y = parseFloat(obj.el.style.top) + speed;
+        obj.el.style.top = y + 'px';
+
+        if(y > road.clientHeight){
+            obj.el.remove();
+            obsList.splice(i,1);
+            score++;
+            scoreText.textContent = score;
+            
+            if (obj.lane === targetLane) {
+                lastAvoidObsTime = Date.now();
+            }
+        }
+
+        if(obj.lane === currentLane && y > road.clientHeight - 120 && y < road.clientHeight - 40){
+            gameOver();
+        }
+    });
+    animationFrameId = requestAnimationFrame(gameLoop);
+}
+
+function gameOver(){
+    gameRunning = false;
+    gamePaused = false;
+    cancelAnimationFrame(animationFrameId);
+    overText.style.display = 'block';
+    startBtn.style.display = 'block';
+    startBtn.textContent = '重新开始';
+    ruleBox.style.display = 'block';
+    pauseBtn.style.display = 'none';
+    
+    // 存储得分到localStorage
+    if (score > 0) {
+        const currentHighScore = localStorage.getItem('manualCarHighScore') || 0;
+        if (score > parseInt(currentHighScore)) {
+            localStorage.setItem('manualCarHighScore', score.toString());
+            alert(`新的最高分！得分：${score}`);
+        }
+    }
+}
+
+function pauseGame() {
+    if (!gameRunning) return;
+    gamePaused = true;
+    pauseMask.style.display = 'flex';
+    cancelAnimationFrame(animationFrameId);
+}
+
+function resumeGame() {
+    if (!gameRunning) return;
+    gamePaused = false;
+    pauseMask.style.display = 'none';
+    gameLoop();
+}
+
+pauseBtn.addEventListener('click', pauseGame);
+
+startBtn.addEventListener('click',()=>{
+    if(gameRunning) return;
+    obsList.forEach(o=>o.el.remove());
+    obsList = [];
+    score = 0;
+    scoreText.textContent = '0';
+    speed = 1.2;
+    targetLane = 2;
+    currentLane = 2;
+    lastAvoidObsTime = 0;
+    gamePaused = false;
+    
+    car.style.left = laneCenter[currentLane] + 'px';
+    virtualStraight.style.left = laneCenter[currentLane] + 'px';
+    overText.style.display = 'none';
+    startBtn.style.display = 'none';
+    ruleBox.style.display = 'none';
+    gameRunning = true;
+    pauseBtn.style.display = 'block';
+    pauseMask.style.display = 'none';
+
+    laneSelect.style.display = 'block';
+    laneButtons.forEach(b => b.classList.remove('active'));
+    laneButtons[targetLane].classList.add('active');
+});
+</script>
+</body>
+</html>
